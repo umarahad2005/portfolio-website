@@ -1,46 +1,154 @@
-# Getting Started with Create React App
+# Umar Ahad's Portfolio Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive portfolio website built with React, showcasing my projects and skills as an AI Developer and aspiring Data Scientist.
 
-## Available Scripts
+![Portfolio Preview](public/preview.png)
 
-In the project directory, you can run:
+## 🌟 Features
 
-### `npm start`
+- **Modern UI/UX**: Clean and professional design with smooth animations
+- **Responsive Design**: Fully responsive across all devices
+- **Interactive Elements**: Dynamic animations and transitions
+- **Dark Theme**: Eye-friendly dark mode design
+- **Project Showcase**: Detailed project presentations with live demos
+- **Downloadable CV**: Generate and download CV in PDF format
+- **Contact Form**: Interactive contact form for easy communication
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🚀 Projects Showcased
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### BitBraniac AI Chatbot
+- AI-powered CS tutor with React frontend and Python Flask backend
+- Integrated with Google's Gemini AI and LangChain
+- Real-time responses and interactive learning features
 
-### `npm test`
+### Safe Scan
+- Privacy-focused QR code scanner for Android
+- Built-in malicious URL detection
+- Secure scanning with history tracking
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Keusmania
+- Modern React-based website
+- Clean and responsive design
+- Interactive UI elements and animations
 
-### `npm run build`
+## 🛠️ Technologies Used
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Frontend
+- React.js
+- Material-UI
+- Framer Motion
+- Tailwind CSS
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Animation & Styling
+- CSS3 with custom animations
+- Framer Motion for interactive animations
+- Glass-morphism effects
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Development Tools
+- Git & GitHub
+- VS Code
+- npm
 
-### `npm run eject`
+## 🏗️ Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+portfolio-website/
+├── public/
+│   ├── images/
+│   └── index.html
+├── src/
+│   ├── components/
+│   │   ├── About.jsx
+│   │   ├── Contact.jsx
+│   │   ├── Home.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── Projects.jsx
+│   │   └── Resume.jsx
+│   ├── context/
+│   │   └── ThemeContext.jsx
+│   ├── hooks/
+│   │   └── useScrollAnimation.js
+│   ├── App.jsx
+│   └── index.jsx
+└── package.json
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🚀 Getting Started
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Prerequisites
+- Node.js (v14 or higher)
+- npm (v6 or higher)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Installation
 
-## Learn More
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/portfolio-website.git
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Navigate to project directory
+```bash
+cd portfolio-website
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Install dependencies
+```bash
+npm install
+```
+
+4. Start the development server
+```bash
+npm start
+```
+
+5. Build for production
+```bash
+npm run build
+```
+
+## 📱 Responsive Design
+
+The website is fully responsive and optimized for:
+- Desktop (1200px and above)
+- Laptop (1024px)
+- Tablet (768px)
+- Mobile (480px and below)
+
+## ✨ Features in Detail
+
+### Interactive Animations
+- Smooth page transitions
+- Scroll-triggered animations
+- Hover effects on project cards
+- Particle effects in background
+- Loading animations
+
+### Performance Optimization
+- Lazy loading of images
+- Code splitting
+- Optimized build size
+- Efficient animation handling
+
+### SEO & Accessibility
+- Semantic HTML structure
+- Meta tags optimization
+- Keyboard navigation support
+- ARIA labels for accessibility
+
+## 🤝 Contributing
+
+Feel free to fork this repository and submit pull requests. You can also open issues for any bugs or improvements.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Contact
+
+- Email: umarahadusmani@gmail.com
+- LinkedIn: [Umar Ahad](https://linkedin.com/in/umarahadusmani)
+- GitHub: [umarahad2005](https://github.com/umarahad2005)
+
+---
+
+Made with ❤️ by Umar Ahad
