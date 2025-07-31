@@ -11,7 +11,7 @@ function Projects() {
       title: "BitBraniac AI Chatbot",
       description: "An AI-powered CS tutor built with React frontend and Python Flask backend, leveraging Google's Gemini AI and LangChain for advanced natural language processing and interactive learning experiences.",
       technologies: ["React", "Python", "Flask", "Gemini AI", "LangChain"],
-      demoLink: "https://bitbraniac-demo.com",
+      demoLink: "https://bit-brainiac.vercel.app/",
       features: [
         "Real-time AI responses using Gemini",
         "LangChain for enhanced NLP capabilities",
@@ -22,7 +22,7 @@ function Projects() {
       title: "Safe Scan",
       description: "A privacy-focused QR code scanner app developed for Android, focusing on user privacy and security.",
       technologies: ["Android", "Java", "Security", "QR Code", "SQLite"],
-      demoLink: "https://safescan-demo.com",
+      demoLink: "https://play.google.com/store/apps/details?id=com.safescan.qr",
       features: [
         "Malicious URL detection",
         "Scan history",
