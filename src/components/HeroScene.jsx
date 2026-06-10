@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import {
   AdaptiveDpr,
@@ -119,11 +119,26 @@ function Studio() {
   )
 }
 
-export default function HeroScene() {
-  const isMobile = useMemo(
+/* Tracks the mobile breakpoint reactively so resize/orientation
+   changes update the Canvas DPR and effects. */
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < 768,
-    [],
   )
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 767px)')
+    const onChange = (event) => setIsMobile(event.matches)
+    setIsMobile(query.matches)
+    query.addEventListener('change', onChange)
+    return () => query.removeEventListener('change', onChange)
+  }, [])
+
+  return isMobile
+}
+
+export default function HeroScene() {
+  const isMobile = useIsMobile()
 
   return (
     <Canvas
