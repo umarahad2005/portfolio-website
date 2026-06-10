@@ -30,12 +30,12 @@ function LiquidBlob() {
         <MeshDistortMaterial
           distort={0.38}
           speed={1.6}
-          color="#cdc4ff"
-          metalness={0.92}
-          roughness={0.06}
+          color="#e4ddff"
+          metalness={0.85}
+          roughness={0.14}
           clearcoat={1}
-          clearcoatRoughness={0.08}
-          envMapIntensity={1.4}
+          clearcoatRoughness={0.12}
+          envMapIntensity={2.2}
         />
       </mesh>
     </Float>
@@ -111,10 +111,17 @@ function MouseRig({ children }) {
 function Studio() {
   return (
     <Environment resolution={256}>
-      <Lightformer intensity={2.4} position={[0, 4, -4]} scale={[10, 3, 1]} color="#ffffff" />
-      <Lightformer intensity={1.6} position={[-5, 1, 2]} rotation-y={Math.PI / 2} scale={[8, 2, 1]} color="#8b5cf6" />
-      <Lightformer intensity={1.6} position={[5, -1, 2]} rotation-y={-Math.PI / 2} scale={[8, 2, 1]} color="#22d3ee" />
-      <Lightformer intensity={0.9} position={[0, -4, 3]} scale={[6, 2, 1]} color="#f472b6" />
+      {/* dim dome so reflections never fall to pure black */}
+      <mesh scale={60}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshBasicMaterial color="#1b1e36" side={THREE.BackSide} />
+      </mesh>
+      <Lightformer intensity={5} position={[0, 5, -6]} scale={[14, 5, 1]} color="#ffffff" />
+      <Lightformer intensity={4} position={[0, 2, 6]} scale={[12, 4, 1]} color="#dfe6ff" />
+      <Lightformer form="ring" intensity={4} position={[0, 6, 2]} scale={5} color="#ffffff" />
+      <Lightformer intensity={3.5} position={[-6, 1, 1]} rotation-y={Math.PI / 2} scale={[10, 4, 1]} color="#8b5cf6" />
+      <Lightformer intensity={3.5} position={[6, -1, 1]} rotation-y={-Math.PI / 2} scale={[10, 4, 1]} color="#22d3ee" />
+      <Lightformer intensity={2.2} position={[0, -5, 3]} scale={[10, 3, 1]} color="#f472b6" />
     </Environment>
   )
 }
