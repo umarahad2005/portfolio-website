@@ -47,6 +47,7 @@ const TECHS = [
 function OrbitalRing({ radius, tiltX = 0, tiltZ = 0, color = '#7C3AED' }) {
   const ref = useRef();
   useFrame((_, delta) => {
+    if (!ref.current) return;
     ref.current.rotation.y += delta * 0.18;
   });
 
@@ -75,6 +76,7 @@ function SatelliteBadge({ tech, orbitRadius, orbitSpeed, orbitTilt, phaseOffset 
   const angle = useRef(phaseOffset);
 
   useFrame((_, delta) => {
+    if (!groupRef.current) return;
     angle.current += delta * orbitSpeed;
     const x = Math.cos(angle.current) * orbitRadius;
     const z = Math.sin(angle.current) * orbitRadius;
@@ -130,13 +132,19 @@ function AICore() {
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    coreRef.current.rotation.x = t * 0.3;
-    coreRef.current.rotation.z = t * 0.22;
+    if (coreRef.current) {
+      coreRef.current.rotation.x = t * 0.3;
+      coreRef.current.rotation.z = t * 0.22;
+    }
 
     // Breathing pulse
     const pulse = 1 + Math.sin(t * 1.8) * 0.06;
-    glowRef.current.scale.setScalar(pulse);
-    haloRef.current.scale.setScalar(1 + Math.sin(t * 1.2) * 0.12);
+    if (glowRef.current) {
+      glowRef.current.scale.setScalar(pulse);
+    }
+    if (haloRef.current) {
+      haloRef.current.scale.setScalar(1 + Math.sin(t * 1.2) * 0.12);
+    }
   });
 
   return (
@@ -245,6 +253,7 @@ function ParallaxRig({ children }) {
   }, []);
 
   useFrame(() => {
+    if (!groupRef.current) return;
     target.current.x += (mouse.current.x - target.current.x) * 0.05;
     target.current.y += (mouse.current.y - target.current.y) * 0.05;
     groupRef.current.rotation.y = target.current.x * 0.3;
