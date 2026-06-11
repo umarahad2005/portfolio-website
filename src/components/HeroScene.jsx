@@ -2,97 +2,189 @@ import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import {
   AdaptiveDpr,
+  Billboard,
   Environment,
   Float,
   Lightformer,
   MeshDistortMaterial,
+  RoundedBox,
   Sparkles,
+  Text,
 } from '@react-three/drei'
 import * as THREE from 'three'
 
-/* Liquid-chrome centerpiece: a distorted icosahedron with a mirror finish.
-   The distortion animates every frame; the env map gives the glossy look. */
-function LiquidBlob() {
-  const mesh = useRef()
+/* Tech stack shown as orbiting satellite badges around the AI core. */
+const TECHS = [
+  { label: 'Flutter', color: '#54C5F8' },
+  { label: 'Firebase', color: '#FFA000' },
+  { label: 'Gemini', color: '#8AB4F8' },
+  { label: 'React', color: '#61DAFB' },
+  { label: 'FastAPI', color: '#0BA37F' },
+  { label: 'Python', color: '#FFD43B' },
+  { label: 'LangChain', color: '#34D399' },
+  { label: 'MERN', color: '#A78BFA' },
+]
 
-  useFrame((state) => {
-    const t = state.clock.elapsedTime
-    if (mesh.current) {
-      mesh.current.rotation.y = t * 0.12
-      mesh.current.rotation.x = Math.sin(t * 0.2) * 0.15
+/* AI core: liquid-chrome pearl (the glossy centerpiece) inside a pulsing
+   wireframe icosahedron cage with a breathing halo. */
+function AICore() {
+  const cage = useRef()
+  const halo = useRef()
+
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime
+    if (cage.current) {
+      cage.current.rotation.x = t * 0.28
+      cage.current.rotation.z = t * 0.2
+    }
+    if (halo.current) {
+      halo.current.scale.setScalar(1.3 + Math.sin(t * 1.4) * 0.09)
     }
   })
 
   return (
-    <Float speed={1.4} rotationIntensity={0.4} floatIntensity={1.1}>
-      <mesh ref={mesh} scale={1.45}>
-        <icosahedronGeometry args={[1, 64]} />
-        <MeshDistortMaterial
-          distort={0.38}
-          speed={1.6}
-          color="#e4ddff"
-          metalness={0.85}
-          roughness={0.14}
-          clearcoat={1}
-          clearcoatRoughness={0.12}
-          envMapIntensity={2.2}
+    <group>
+      <Float speed={1.6} rotationIntensity={0.3} floatIntensity={0.45}>
+        <mesh scale={0.8}>
+          <icosahedronGeometry args={[1, 64]} />
+          <MeshDistortMaterial
+            distort={0.32}
+            speed={1.8}
+            color="#e4ddff"
+            metalness={0.85}
+            roughness={0.14}
+            clearcoat={1}
+            clearcoatRoughness={0.12}
+            envMapIntensity={2.2}
+          />
+        </mesh>
+      </Float>
+
+      <mesh ref={cage} scale={1.12}>
+        <icosahedronGeometry args={[1, 1]} />
+        <meshStandardMaterial
+          color="#7C3AED"
+          emissive="#7C3AED"
+          emissiveIntensity={0.9}
+          wireframe
+          transparent
+          opacity={0.5}
+          toneMapped={false}
         />
       </mesh>
-    </Float>
+
+      <mesh ref={halo}>
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshBasicMaterial
+          color="#7C3AED"
+          transparent
+          opacity={0.055}
+          side={THREE.BackSide}
+          depthWrite={false}
+        />
+      </mesh>
+    </group>
   )
 }
 
-function GlossyRing() {
+/* Thin emissive ring that slowly precesses for a touch of life. */
+function OrbitalRing({ radius, tilt, color }) {
   const ref = useRef()
-  useFrame((state) => {
-    const t = state.clock.elapsedTime
+  useFrame(({ clock }) => {
     if (ref.current) {
-      ref.current.rotation.x = Math.PI / 2.4 + Math.sin(t * 0.3) * 0.12
-      ref.current.rotation.z = t * 0.18
+      ref.current.rotation.z = Math.sin(clock.elapsedTime * 0.3) * 0.14
     }
   })
   return (
-    <mesh ref={ref} scale={2.5}>
-      <torusGeometry args={[1, 0.025, 16, 128]} />
-      <meshPhysicalMaterial
-        color="#8b5cf6"
-        metalness={1}
-        roughness={0.18}
-        envMapIntensity={1.6}
-        emissive="#4c1d95"
-        emissiveIntensity={0.35}
-      />
-    </mesh>
+    <group rotation={tilt}>
+      <group ref={ref}>
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[radius, 0.012, 8, 128]} />
+          <meshStandardMaterial
+            color={color}
+            emissive={color}
+            emissiveIntensity={1.6}
+            toneMapped={false}
+          />
+        </mesh>
+      </group>
+    </group>
   )
 }
 
-function Satellite({ position, scale, color, geometry, speed = 1 }) {
+/* Glass tech pill that orbits the core and always faces the camera. */
+function SatelliteBadge({ tech, radius, speed, phase }) {
+  const ref = useRef()
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return
+    const a = phase + clock.elapsedTime * speed
+    ref.current.position.set(Math.cos(a) * radius, 0, Math.sin(a) * radius)
+  })
+
   return (
-    <Float speed={2.2 * speed} rotationIntensity={1.4} floatIntensity={2.2}>
-      <mesh position={position} scale={scale}>
-        {geometry === 'octa' ? (
-          <octahedronGeometry args={[1, 0]} />
-        ) : geometry === 'tetra' ? (
-          <tetrahedronGeometry args={[1, 0]} />
-        ) : (
-          <sphereGeometry args={[1, 32, 32]} />
-        )}
-        <meshPhysicalMaterial
-          color={color}
-          metalness={0.9}
-          roughness={0.12}
-          clearcoat={1}
-          clearcoatRoughness={0.1}
-          iridescence={0.9}
-          iridescenceIOR={1.6}
-          envMapIntensity={1.5}
-        />
-      </mesh>
-    </Float>
+    <group ref={ref}>
+      <Billboard follow>
+        <RoundedBox args={[1.3, 0.46, 0.08]} radius={0.1} smoothness={4}>
+          <meshPhysicalMaterial
+            color={tech.color}
+            transparent
+            opacity={0.16}
+            metalness={0.6}
+            roughness={0.12}
+            envMapIntensity={1.2}
+          />
+        </RoundedBox>
+        <RoundedBox args={[0.07, 0.3, 0.09]} radius={0.03} smoothness={4} position={[-0.52, 0, 0.01]}>
+          <meshStandardMaterial
+            color={tech.color}
+            emissive={tech.color}
+            emissiveIntensity={2}
+            toneMapped={false}
+          />
+        </RoundedBox>
+        <Text fontSize={0.155} color={tech.color} anchorX="center" anchorY="middle" position={[0.06, 0, 0.06]}>
+          {tech.label}
+        </Text>
+      </Billboard>
+    </group>
   )
 }
 
-/* Lerp the whole group toward the pointer for a parallax feel. */
+/* Two counter-rotating orbit tracks of tech badges. */
+function Satellites() {
+  const outer = TECHS.slice(0, 4)
+  const inner = TECHS.slice(4)
+
+  return (
+    <>
+      <group rotation={[0.28, 0, 0]}>
+        {outer.map((tech, i) => (
+          <SatelliteBadge
+            key={tech.label}
+            tech={tech}
+            radius={2.5}
+            speed={0.32}
+            phase={(i / outer.length) * Math.PI * 2}
+          />
+        ))}
+      </group>
+      <group rotation={[-0.22, 0.6, 0]}>
+        {inner.map((tech, i) => (
+          <SatelliteBadge
+            key={tech.label}
+            tech={tech}
+            radius={1.75}
+            speed={-0.45}
+            phase={(i / inner.length) * Math.PI * 2 + Math.PI * 0.25}
+          />
+        ))}
+      </group>
+    </>
+  )
+}
+
+/* Lerp the whole scene toward the pointer for a parallax feel. */
 function MouseRig({ children }) {
   const group = useRef()
   useFrame((state, delta) => {
@@ -118,7 +210,6 @@ function Studio() {
       </mesh>
       <Lightformer intensity={5} position={[0, 5, -6]} scale={[14, 5, 1]} color="#ffffff" />
       <Lightformer intensity={4} position={[0, 2, 6]} scale={[12, 4, 1]} color="#dfe6ff" />
-      <Lightformer form="ring" intensity={4} position={[0, 6, 2]} scale={5} color="#ffffff" />
       <Lightformer intensity={3.5} position={[-6, 1, 1]} rotation-y={Math.PI / 2} scale={[10, 4, 1]} color="#8b5cf6" />
       <Lightformer intensity={3.5} position={[6, -1, 1]} rotation-y={-Math.PI / 2} scale={[10, 4, 1]} color="#22d3ee" />
       <Lightformer intensity={2.2} position={[0, -5, 3]} scale={[10, 3, 1]} color="#f472b6" />
@@ -150,7 +241,7 @@ export default function HeroScene() {
   return (
     <Canvas
       dpr={[1, isMobile ? 1.5 : 1.75]}
-      camera={{ position: [0, 0, 7], fov: 42 }}
+      camera={{ position: [0, 0, 7], fov: 50 }}
       gl={{
         antialias: true,
         alpha: true,
@@ -161,17 +252,20 @@ export default function HeroScene() {
     >
       <Suspense fallback={null}>
         <MouseRig>
-          <LiquidBlob />
-          <GlossyRing />
-          <Satellite position={[2.6, 1.4, -0.5]} scale={0.34} color="#22d3ee" geometry="octa" />
-          <Satellite position={[-2.7, -1.2, -0.3]} scale={0.3} color="#f472b6" geometry="tetra" speed={0.8} />
-          <Satellite position={[-2.2, 1.8, -1]} scale={0.2} color="#8b5cf6" geometry="sphere" speed={1.3} />
+          <group scale={isMobile ? 0.68 : 0.85}>
+            <AICore />
+            <OrbitalRing radius={1.35} tilt={[Math.PI / 2.2, 0, 0.4]} color="#7C3AED" />
+            <OrbitalRing radius={1.6} tilt={[Math.PI / 3, 0, -0.6]} color="#3B82F6" />
+            <Satellites />
+          </group>
           {!isMobile && (
-            <Sparkles count={110} scale={9} size={2.2} speed={0.35} opacity={0.55} color="#a78bfa" />
+            <Sparkles count={100} scale={9} size={2} speed={0.35} opacity={0.5} color="#a78bfa" />
           )}
         </MouseRig>
         <Studio />
-        <ambientLight intensity={0.25} />
+        <ambientLight intensity={0.3} />
+        <pointLight position={[4, 4, 4]} intensity={26} color="#7C3AED" />
+        <pointLight position={[-4, -2, -4]} intensity={16} color="#3B82F6" />
       </Suspense>
       <AdaptiveDpr pixelated />
     </Canvas>
